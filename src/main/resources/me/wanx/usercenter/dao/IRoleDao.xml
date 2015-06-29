@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="me.wanx.usercenter.dao.IRoleDao">
+		<select id="gets" resultType="Role">
+			select *
+			from t_role
+		</select>
+		
+		<select id="get" resultType="Role">
+			select *
+			from t_role
+			where roleId=#{roleId}
+		</select>
+		
+		<insert id="add" parameterType="Role" keyProperty="roleId" useGeneratedKeys="true">
+			insert into t_role(roleName,roleCode,status,createByUserId,lastUpdateUserId,createTime,updateTime) 
+						values(#{roleName},#{roleCode},#{status},#{createByUserId},#{lastUpdateUserId},#{createTime},#{updateTime});
+		</insert>
+		
+		<delete id="del">
+			delete 
+			from t_role
+			where roleId=#{roleId}
+		</delete>
+		
+		<update id="update" parameterType="Role">
+			update t_role set 
+			<if test="roleName!=null and roleName!=''">
+				roleName=#{roleName}
+			</if>
+			<if test="roleCode!=null and roleCode!=''">
+				,roleCode=#{roleCode}
+			</if>
+			<if test="status!=null and status!=''">
+				,status=#{status}
+			</if>
+			<if test="createByUserId!=null and createByUserId!=''">
+				,createByUserId=#{createByUserId}
+			</if>
+			<if test="lastUpdateUserId!=null and lastUpdateUserId!=''">
+				,lastUpdateUserId=#{lastUpdateUserId}
+			</if>
+			<if test="updateTime!=null and updateTime!=''">
+				,updateTime=#{updateTime}
+			</if>
+			where roleId=#{roleId}
+		</update>
+		
+		<!-- 获取角色下的所有资源 -->
+		<select id="getRoleResources" resultType="Resource">
+			select c.* 
+			from t_role a,t_role_res b,t_resource c
+			where a.roleId=b.roleId and b.resId=c.resId and a.roleId=#{roleId}
+		</select>
+		
+		<!-- 获取角色下的所有资源 -->
+		<select id="getRoleResCode" resultType="java.lang.String">
+			select c.resCode
+			from t_role a,t_role_res b,t_resource c
+			where a.roleId=b.roleId and b.resId=c.resId and a.roleId=#{roleId}
+		</select>
+		
+		<!-- 获取角色下的所有用户 -->
+		<select id="getRoleUsers" resultType="User">
+			select c.*
+			from t_role a,t_user_role b,t_user c 
+			where a.roleId=b.roleId and b.userId=c.userId and a.roleId=#{roleId}
+		</select>
+		
+		<!-- 根据用户id查询角色 -->
+		<select id="getRoles" resultType="Role">
+			select a.*
+			from t_role a,t_user_role b
+			where a.roleId=b.roleId and b.userId=#{userId} 
+		</select>
+		
+		<!-- 保存角色下的资源 -->
+		<insert id="addRoleRescources" keyColumn="roleResId" useGeneratedKeys="true">
+			insert into t_role_res(roleId,resId) values
+			<foreach collection="resources" item="res" index="index" separator=",">
+				(#{roleId},#{res.resId})
+			</foreach>
+		</insert>
+		
+		<delete id="delRescources">
+			delete 
+			from t_role_res 
+			where roleId=#{roleId}
+		</delete>
+		
+		<!-- 分页 -->
+		<select id="searchRolePagination" resultType="Role">
+			select *
+			from t_role 
+			<if test="sort != null and sort != ''">
+				order by ${sort} 
+			</if>
+			<if test="dir != null and dir != ''">
+				${dir} 
+			</if>
+			limit ${limit} 
+			offset ${start}
+		</select>
+		<select id="searchCountRole" resultType="java.lang.Integer">
+			select count(*) from t_role
+		</select>
+		
+	</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="me.wanx.usercenter.dao.IUserDao">
+		<select id="gets" resultType="User">
+			select *
+			from t_user
+		</select>
+		
+		<select id="get" resultType="User">
+			select *
+			from t_user
+			where userId=#{userId}
+		</select>
+		
+		<!-- keyProperty="userId" 指定了User对象中的属性 -->
+		<insert id="add" parameterType="User" keyProperty="userId" useGeneratedKeys="true">
+			insert into t_user(userName,account,password,email,mobile,status,createTime,updateTime) 
+						values(#{userName},#{account},#{password},#{email},#{mobile},#{status},#{createTime},#{updateTime});
+		</insert>
+		
+		<delete id="del">
+			delete 
+			from t_user
+			where userId=#{userId}
+		</delete>
+		
+		<update id="update" parameterType="User">
+			update t_user set 
+			<if test="userName!=null and userName!=''">
+				userName=#{userName}
+			</if>
+			<if test="password!=null and password!=''">
+				,password=#{password}
+			</if>
+			<if test="email!=null and email!=''">
+				,email=#{email}
+			</if>
+			<if test="mobile!=null and mobile!=''">
+				,mobile=#{mobile}
+			</if>
+			<if test="status!=null and status!=''">
+				,status=#{status}
+			</if>
+			<if test="updateTime!=null and updateTime!=''">
+				,updateTime=#{updateTime}
+			</if>
+			where userId=#{userId}
+		</update>
+		
+		<!-- 登录 -->
+		<select id="login" resultType="User">
+			select *
+			from t_user
+			where account=#{account} and password=#{password}
+		</select>
+		
+		<!-- 删除用户下所有角色 -->
+		<delete id="delRoles">
+			delete 
+			from t_user_role 
+			where userId=#{userId}
+		</delete>
+		
+		<!-- 批量给userId用户添加角色 keyProperty="userRoleId"-->
+		<insert id="addUserRoles" keyColumn="userRoleId" useGeneratedKeys="true">
+			insert into t_user_role(userId,roleId) values
+			<foreach collection="roles" item="role" index="index" separator=",">
+				(#{userId},#{role.roleId})
+			</foreach>
+		</insert>
+		
+		<!-- 获取用户下所有角色 -->
+		<select id="getUserRoles" resultType="Role">
+			select c.* 
+			from t_user a,t_user_role b,t_role c
+			where a.userId=b.userId and b.roleId=c.roleId and a.userId=#{userId}
+		</select>
+		
+		<!-- 获取用户下所有角色code -->
+		<select id="getUserRoleCode" resultType="java.lang.String">
+			select c.roleCode
+			from t_user a,t_user_role b,t_role c
+			where a.userId=b.userId and b.roleId=c.roleId and a.userId=#{userId}
+		</select>
+		
+		<select id="getUser4UserName" resultType="User">
+			select *
+			from t_user 
+			where userName=#{userName}
+		</select>
+		
+		<!-- 分页 -->
+		<select id="searchUserPagination" resultType="User">
+			select *
+			from t_user 
+			<if test="sort != null and sort != ''">
+				order by ${sort} 
+			</if>
+			<if test="dir != null and dir != ''">
+				${dir} 
+			</if>
+			limit ${limit} 
+			offset ${start}
+		</select>
+		<select id="searchCountUser" resultType="java.lang.Integer">
+			select count(*)
+			from t_user
+		</select>
+	</mapper>
