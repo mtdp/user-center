@@ -59,6 +59,10 @@ public class UserServiceImpl implements IUserService {
 		}
 		user.setCreateTime(DateUtil.getCurrentTime());
 		user.setUpdateTime(DateUtil.getCurrentTime());
+		//如果密码为空设置默认密码
+		if(null == user.getPassword() || user.getAccount().isEmpty()){
+			user.setPassword(UserCenterConstant.DEFAULT_PASSWORD);
+		}
 		int c = userDao.add(user);
 		if(c > 0){
 			return true;
@@ -75,8 +79,10 @@ public class UserServiceImpl implements IUserService {
 		if(null == user.getStatus() || user.getStatus().isEmpty()){
 			user.setStatus(UserCenterConstant.STATUS_OFF);
 		}
+		user.setUpdateTime(DateUtil.getCurrentTime());
 		int c = userDao.update(user);
 		if(c > 0){
+			saveOrUpdateUserRoles(user.getUserId(),user.getRoles());
 			return true;
 		}
 		return false;
@@ -86,6 +92,8 @@ public class UserServiceImpl implements IUserService {
 	public boolean delete(User user) throws UserCenterServiceException {
 		int c = userDao.del(user.getUserId());
 		if(c > 0){
+			//删除用户关联的角色信息
+			userDao.delRoles(user.getUserId());
 			return true;
 		}
 		return false;
@@ -95,6 +103,8 @@ public class UserServiceImpl implements IUserService {
 	public boolean delete(Integer userId) throws UserCenterServiceException {
 		int c = userDao.del(userId);
 		if(c > 0){
+			//删除用户关联的角色信息
+			userDao.delRoles(userId);
 			return true;
 		}
 		return false;

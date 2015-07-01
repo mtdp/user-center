@@ -53,12 +53,6 @@
 		<artifactId>spring-webmvc</artifactId>
 		<version>${spring.version}</version>
 	</dependency>
-	<!-- druid 数据库连接池 -->
-	<dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>druid</artifactId>
-        <version>1.0.14</version>
-    </dependency>
     <!-- shiro -->
     <dependency>
     	<groupId>org.apache.shiro</groupId>
@@ -92,10 +86,15 @@
 		<version>2.4.8</version>
 	</dependency>
 	-->
+	<dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-mapper-asl</artifactId>
+        <version>1.9.8</version>
+     </dependency>
   </dependencies>
   
   <build>
-	 <finalName>user-center</finalName>
+	<finalName>user-center</finalName>
 	<defaultGoal>install</defaultGoal>
 	<plugins>
 		<!-- compiler插件, 设定JDK版本 -->

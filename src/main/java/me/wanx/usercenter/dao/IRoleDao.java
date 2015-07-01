@@ -53,7 +53,7 @@ public interface IRoleDao<T extends Role> extends BaseMapper<T> {
 	public int addRoleRescources(@Param("roleId")Integer roleId,@Param("resources")List<Resource> resources);
 	
 	/**
-	 * 删除角色下的所有资源
+	 * 删除角色下的所有资源关联信息
 	 * @param roleId
 	 * @return
 	 */

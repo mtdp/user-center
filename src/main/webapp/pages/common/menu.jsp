@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <div class="well sidebar-nav">
    <ul class="nav nav-list" id="J_change_active">
      <li class="nav-header"><i class="icon-wrench"></i> 系统管理</li>

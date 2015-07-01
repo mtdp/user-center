@@ -52,6 +52,24 @@
 						</div>
 					</div>
 					<div class="control-group">
+						<label class="control-label" for="resParent">resParent</label>
+						<div class="controls">
+							<select name="parentId" id="resParent">
+								<option value="">--请选择父菜单--</option>
+								<option value="0">我就是一级菜单</option>
+								<c:forEach items="${parentRes}" var="p">
+									<option value="${p.resId}">${p.resName}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="isMenu">isMenu?</label>
+						<div class="controls">
+							<input id="isMenu" name="isMenu" type="checkbox" id="status" value="0" />
+						</div>
+					</div>
+					<div class="control-group">
 						<label class="control-label" for="active">Active?</label>
 						<div class="controls">
 							<input id="active" name="status" type="checkbox" id="status" value="1" />

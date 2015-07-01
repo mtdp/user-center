@@ -61,7 +61,7 @@
 						<label class="control-label" for="role">role</label>
 						<div class="controls">
 							<select name="roles[0].roleId" id="role">
-								<option>--请选择角色--</option>
+								<option value="">--请选择角色--</option>
 								<c:forEach items="${roles}" var="role">
 									<option value="${role.roleId}">${role.roleName}</option>
 								</c:forEach>

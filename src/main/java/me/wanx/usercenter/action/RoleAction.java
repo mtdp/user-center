@@ -1,8 +1,17 @@
 package me.wanx.usercenter.action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import me.wanx.common.core.persistence.BasePagination;
+import me.wanx.usercenter.action.bean.ZTreeBean;
+import me.wanx.usercenter.bean.Resource;
 import me.wanx.usercenter.bean.Role;
 import me.wanx.usercenter.exception.UserCenterServiceException;
+import me.wanx.usercenter.service.IResourceService;
 import me.wanx.usercenter.service.IRoleService;
 import me.wanx.usercenter.service.IUserService;
 
@@ -12,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 
@@ -30,6 +40,8 @@ public class RoleAction extends BaseAction {
 	private IUserService userService;
 	@Autowired
 	private IRoleService roleService;
+	@Autowired
+	private IResourceService resourceService;
 	
 	/**
 	 * 角色列表
@@ -91,7 +103,17 @@ public class RoleAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/updateRole.do")
-	public String updateRole(Role role){
+	public String updateRole(Role role,String chooseResIds){
+		List<Resource> resList = new ArrayList<Resource>();
+		if(chooseResIds != null && !chooseResIds.isEmpty()){
+			List<String> resIds = Arrays.asList(chooseResIds.split(","));
+			for(String str : resIds){
+				Resource res = new Resource();
+				res.setResId(Integer.parseInt(str));
+				resList.add(res);
+			}
+		}
+		role.setResources(resList);
 		roleService.update(role);
 		return "redirect:roles.do";
 	}
@@ -127,6 +149,52 @@ public class RoleAction extends BaseAction {
 		return "pages/detail-role";
 	}
 	
+	/**
+	 * ajax 请求菜单
+	 * @param resIds
+	 * @return
+	 */
+	@RequestMapping("/ajaxMenu.do")
+	@ResponseBody
+	public List<ZTreeBean> ajaxGetMenu(ModelMap model ,String resIds,String roleId){
+		logger.info("resIds="+resIds);
+		List<Resource> res = resourceService.getMenuRes();
+		Map<Integer,ZTreeBean> zTreeBeans = new HashMap<Integer,ZTreeBean>();
+		List<String> checkedResIds = new ArrayList<String>();
+		if(resIds == null || resIds.isEmpty()){
+			//第一次编辑查询数据库中关联的资源
+			List<Resource> resList = roleService.getRoleResource(Integer.parseInt(roleId));
+			for(Resource r : resList){
+				checkedResIds.add(String.valueOf(r.getResId()));
+			}
+		}else{
+			//第二次编辑没有保存 获取修改后的资源id
+			checkedResIds = Arrays.asList(resIds.split(","));
+		}
+		for(Resource r : res){
+			ZTreeBean treeBean = new ZTreeBean();
+			treeBean.setId(r.getResId());
+			treeBean.setName(r.getResName());
+			treeBean.setpId(r.getParentId());
+			treeBean.setOpen(true); //默认打开
+			//是否被选中
+			if(checkedResIds.contains(String.valueOf(treeBean.getId()))){
+				treeBean.setChecked(true);
+			}
+			List<Resource> rs = resourceService.getSubMenuRes(r.getResId());
+			for(Resource rr : rs){
+				ZTreeBean subTreeBean = new ZTreeBean();
+				subTreeBean.setId(rr.getResId());
+				subTreeBean.setpId(rr.getParentId());
+				subTreeBean.setName(rr.getResName());
+				if(checkedResIds.contains(String.valueOf(subTreeBean.getId()))){
+					subTreeBean.setChecked(true);
+				}
+				zTreeBeans.put(subTreeBean.getId(), subTreeBean);
+			}
+			zTreeBeans.put(treeBean.getId(),treeBean);
+		}
+		return new ArrayList<ZTreeBean>(zTreeBeans.values());
+	}
 	
-
 }

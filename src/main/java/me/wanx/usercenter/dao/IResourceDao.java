@@ -23,5 +23,25 @@ public interface IResourceDao<T extends Resource> extends BaseMapper<T> {
 	 */
 	public List<Resource> searchResPagination(Map<String,Object> map);
 	public Integer searchCountRes(Map<String,Object> map);
+	
+	/**
+	 * 获取顶级菜单
+	 * @return
+	 */
+	public List<Resource> getMenuResources();
+	
+	/**
+	 * 获取resId下的子菜单
+	 * @param resId
+	 * @return
+	 */
+	public List<Resource> getSubMenuResources(Integer resId);
+	
+	/**
+	 * 获取resId菜单下的按钮
+	 * @param resId
+	 * @return
+	 */
+	public List<Resource> getButtonMenuRes(Integer resId);
 
 }

@@ -35,13 +35,14 @@ CREATE TABLE t_role(
 	PRIMARY KEY(roleId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---资源
+--资源parentId=0顶级菜单
 CREATE TABLE t_resource(
 	resId int auto_increment,
 	resName varchar(50),
 	resURI varchar(200),
 	resCode varchar(50),
 	isMenu varchar(2),
+	parentId int,
 	status varchar(2),
 	rank int,
 	createTime varchar(14),

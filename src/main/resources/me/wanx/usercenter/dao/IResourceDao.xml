@@ -14,8 +14,8 @@
 		</select>
 		
 		<insert id="add" parameterType="Resource" keyProperty="resId" useGeneratedKeys="true">
-			insert into t_resource(resName,resURI,resCode,isMenu,status,rank,createTime,updateTime) 
-						values(#{resName},#{resURI},#{resCode},#{isMenu},#{status},#{rank},#{createTime},#{updateTime});
+			insert into t_resource(resName,resURI,resCode,isMenu,parentId,status,rank,createTime,updateTime) 
+						values(#{resName},#{resURI},#{resCode},#{isMenu},#{parentId},#{status},#{rank},#{createTime},#{updateTime});
 		</insert>
 		
 		<delete id="del">
@@ -65,5 +65,24 @@
 		</select>
 		<select id="searchCountRes" resultType="java.lang.Integer">
 			select count(*) from t_resource
+		</select>
+		
+		<!-- 获取一级菜单资源 -->
+		<select id="getMenuResources" resultType="Resource">
+			select *
+			from t_resource
+			where isMenu=1 and parentId=0
+		</select>
+		<!-- 获取resId下的子菜单 -->
+		<select id="getSubMenuResources" resultType="Resource">
+			select *
+			from t_resource
+			where parentId=#{resId}
+		</select>
+		<!-- 获取resId菜单下的按钮 -->
+		<select id="getButtonMenuRes" resultType="Resource">
+			select *
+			from t_resource
+			where isMenu=0 and parentId=#{resId}
 		</select>
 	</mapper>

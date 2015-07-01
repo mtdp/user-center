@@ -29,7 +29,7 @@ public interface IUserDao<T extends User> extends BaseMapper<T> {
 	public User login(@Param("account") String account,@Param("password") String password);
 	
 	/**
-	 * 删除userId下所有角色
+	 * 删除userId下所有角色关联信息
 	 * @param userId
 	 * @return
 	 */

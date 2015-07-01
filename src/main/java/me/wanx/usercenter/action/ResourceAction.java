@@ -1,5 +1,7 @@
 package me.wanx.usercenter.action;
 
+import java.util.List;
+
 import me.wanx.common.core.persistence.BasePagination;
 import me.wanx.usercenter.bean.Resource;
 import me.wanx.usercenter.exception.UserCenterServiceException;
@@ -54,7 +56,10 @@ public class ResourceAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/newRes.do")
-	public String newRes(){
+	public String newRes(ModelMap model){
+		//查询所有一级菜单
+		List<Resource> parentRes = resourceService.getMenuRes();
+		model.addAttribute("parentRes", parentRes);
 		return "pages/new-res";
 	}
 	

@@ -13,6 +13,7 @@
 	<link href="../static/css/bootstrap.css" rel="stylesheet">
 	<link href="../static/css/site.css" rel="stylesheet">
     <link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/plugin/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
     <!--[if lt IE 9]>
       <script src="../static/js/html5.js"></script>
     <![endif]-->
@@ -36,7 +37,7 @@
 					<div class="control-group">
 						<label class="control-label" for="roleName">roleName</label>
 						<div class="controls">
-							<input name="roleId" type="hidden" value="${role.roleId}" />
+							<input name="roleId" type="hidden" id="roleId" value="${role.roleId}" />
 							<input name="roleName" type="text" class="input-xlarge" id="roleName" value="${role.roleName}" />
 						</div>
 					</div>
@@ -46,6 +47,14 @@
 							<input name="roleCode" type="text" class="input-xlarge" id="roleCode" value="${role.roleCode}" />
 						</div>
 					</div>
+					<div class="control-group">
+						<label class="control-label" for="chooseRes">chooseRes</label>
+						<div class="controls">
+							<input name="chooseResBtn" type="button" class="input-xlarge" id="chooseResBtnId" value="choose res"/>
+							<input name="chooseResIds" type="hidden" id="chooseResIds" value="" />
+						</div>
+					</div>
+					
 					<div class="control-group">
 						<label class="control-label" for="active">Active?</label>
 						<div class="controls">
@@ -68,8 +77,12 @@
       </footer>
 
     </div>
-
+	<div id="treeDiv" class="zTreeDemoBackground left" style="display: none;">
+		<ul id="tree" class="ztree"></ul>
+	</div>
     <%@include file="/pages/common/footer.jsp"%>
+	<script type="text/javascript" src="../static/plugin/zTree/js/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="../static/plugin/zTree/js/jquery.ztree.excheck-3.5.js"></script>
 	<script>
 	$(document).ready(function() {
 		$('.dropdown-menu li a').hover(
@@ -85,6 +98,55 @@
 			$('tr.list-users td div ul').addClass('pull-right');
 		}
 	});
+	//显示资源tree dialog
+	$('#chooseResBtnId').on('click',function(){
+		var dialog = $.artDialog({
+			id:'edit-role-id',
+			lock:true,
+			title:'所有资源',
+			okValue:'确认',
+			ok:function(){
+				var zTree = $.fn.zTree.getZTreeObj("tree");
+				//获取选中的菜单
+				var checkedMenu = zTree.getCheckedNodes(true);
+				if(checkedMenu != "" && checkedMenu.length>0){
+					var values = "";
+					checkedMenu.forEach(function(c){
+						values += c.id+",";
+					});
+					$('#chooseResIds').val(values.substring(0,values.length-1));
+				}
+				return true;
+			},
+			cancelValue:'取消',
+			cancel:true
+		});
+		var setting = {
+				view: {selectedMulti: false},
+				check: {enable: true},
+				data: {
+					simpleData: {
+						enable: true,
+						idKey: "id",
+						pIdKey: "pId",
+						rootPId: 0
+						}
+				}
+		};
+		//请求trre
+		$.ajax({
+			url:"ajaxMenu.do",
+			type:'post',
+			data:{resIds:$('#chooseResIds').val(),roleId:$('#roleId').val()},
+			success:function(data){
+				//console.log(data);
+				var zNodes = data;
+				$.fn.zTree.init($("#tree"), setting, zNodes);
+				dialog.content(document.getElementById("treeDiv"));
+			}
+		});
+	});
+	
 	</script>
   </body>
 </html>

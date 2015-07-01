@@ -59,7 +59,7 @@ public class UserCenterRealmImpl extends AuthorizingRealm {
 			List<Role> roles = userService.getUserRoles4User(user);
 			for(Role r : roles){
 				set.add(r.getRoleCode());
-				//查询资源 可以用in一次查询TODO
+				//查询资源 可以用in一次查询 TODO
 				List<String> resCodes = roleService.getRoleResCode(r.getRoleId());
 				stringPermissions.addAll(resCodes);
 			}

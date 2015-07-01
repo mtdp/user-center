@@ -72,7 +72,7 @@
 	
 	<!-- 安全管理器 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-	<property name="realm" ref="userCenterRealmImpl"/>
+		<property name="realm" ref="userCenterRealmImpl"/>
 	    <property name="sessionManager" ref="sessionManager"/>
 	    <property name="cacheManager" ref="cacheManager"/>
 	</bean>		
@@ -83,11 +83,13 @@
 	    <property name="passwordParam" value="user.password"/>
 	    <property name="loginUrl" value="/login.jsp"/>
 	</bean>
+	
 	<!-- Shiro的Web过滤器 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 	    <property name="securityManager" ref="securityManager"/>
 	    <property name="loginUrl" value="/login.jsp"/>
 	    <property name="successUrl" value="/home.jsp"/>
+	    <!-- 没有权限默认页面 -->
 	    <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
 	    <!-- 
 	    <property name="filters">
@@ -102,10 +104,11 @@
 	            /unauthorized.jsp = anon
 	            /user/login.do = anon
 	            <!-- 需要认证的 -->
-	            /login.jsp = authc
+	            /login.jsp = anon
 	            /logout = logout
-	            <!-- 表示/目前及子目录都需要已经登录的用户才可以访问 /** = user-->
+	            <!-- /**=user表示/目前及子目录都需要已经登录的用户才可以访问,/**=authc表示需要登录才可以访问-->
 	            /** = anon
+	            /res/res.do = roles[admin]
 	        </value>
 	    </property>
 	</bean>

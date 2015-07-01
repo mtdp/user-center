@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.wanx.common.core.persistence.BasePagination;
+import me.wanx.common.core.utils.DateUtil;
 import me.wanx.usercenter.UserCenterConstant;
 import me.wanx.usercenter.bean.Resource;
 import me.wanx.usercenter.dao.IResourceDao;
@@ -23,11 +24,16 @@ public class ResourceServiceImpl implements IResourceService {
 
 	@Override
 	public boolean save(Resource res) {
-		int c = resourceDao.add(res);
 		//如果状态为空则设置成功禁用
 		if(null == res.getStatus() || res.getStatus().isEmpty()){
 			res.setStatus(UserCenterConstant.STATUS_OFF);
 		}
+		if(null == res.getIsMenu() || res.getIsMenu().isEmpty()){
+			res.setStatus(UserCenterConstant.MENU_OFF);
+		}	
+		res.setCreateTime(DateUtil.getCurrentTime());
+		res.setUpdateTime(DateUtil.getCurrentTime());
+		int c = resourceDao.add(res);
 		if(c > 0 ){
 			return true;
 		}
@@ -43,6 +49,7 @@ public class ResourceServiceImpl implements IResourceService {
 		if(null == res.getStatus() || res.getStatus().isEmpty()){
 			res.setStatus(UserCenterConstant.STATUS_OFF);
 		}
+		res.setUpdateTime(DateUtil.getCurrentTime());
 		int c = resourceDao.update(res);
 		if(c > 0){
 			return true;
@@ -92,5 +99,19 @@ public class ResourceServiceImpl implements IResourceService {
 		List<Resource> res = resourceDao.searchResPagination(param);
 		resPage.setResults(res);
 	}
-
+	
+	@Override
+	public List<Resource> getMenuRes() {
+		return resourceDao.getMenuResources();
+	}
+	
+	@Override
+	public List<Resource> getSubMenuRes(Integer resId) {
+		return resourceDao.getSubMenuResources(resId);
+	}
+	
+	@Override
+	public List<Resource> getButtonMenuRes(Integer resId) {
+		return resourceDao.getButtonMenuRes(resId);
+	}
 }

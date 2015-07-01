@@ -63,8 +63,17 @@ public class RoleServiceImpl implements IRoleService {
 		if(null == role.getStatus() || role.getStatus().isEmpty()){
 			role.setStatus(UserCenterConstant.STATUS_OFF);
 		}
+		role.setUpdateTime(DateUtil.getCurrentTime());
+		//获取当前登录用户
+		User u = userService.getCurrentLoginUser();
+		if(u != null){
+			role.setLastUpdateUserId(u.getUserId());
+		}else{
+			//TODO 抛异常
+		}
 		int c = roleDao.update(role);
 		if(c > 0){
+			saveOrUpdateRoleResource(role.getRoleId(), role.getResources());
 			return true;
 		}
 		return false;
@@ -105,6 +114,8 @@ public class RoleServiceImpl implements IRoleService {
 	public boolean delete(Role role) {
 		int c = roleDao.del(role.getRoleId());
 		if(c > 0){
+			//删除角色关联的资源信息
+			roleDao.delRescources(role.getRoleId());
 			return true;
 		}
 		return false;
@@ -114,6 +125,8 @@ public class RoleServiceImpl implements IRoleService {
 	public boolean delete(Integer roleId) {
 		int c = roleDao.del(roleId);
 		if(c > 0){
+			//删除角色关联的资源信息
+			roleDao.delRescources(roleId);
 			return true;
 		}
 		return false;
