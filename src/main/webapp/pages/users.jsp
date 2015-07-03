@@ -49,7 +49,7 @@
 				<c:forEach items="${userPage.results}" var="user" varStatus="s">
 				<tr class="list-users">
 					<td>
-						<input name="userId" type="checkbox" id="userId" value="${user.userId}" /> 
+						<input name="userId" type="checkbox" class="userId" value="${user.userId}" /> 
 					</td>
 					<td>${s.index+1}</td>
 					<td>${user.userName}</td>
@@ -65,17 +65,11 @@
 						</c:if>
 					</td>
 					<td>
-						<div class="btn-group">
-							<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="editUser.do?userId=${user.userId}"><i class="icon-pencil"></i> Edit</a></li>
-								<li><a href="deleteUser.do?userId=${user.userId}"><i class="icon-trash"></i> Delete</a></li>
-								<li><a href="detailUser.do?userId=${user.userId}"><i class="icon-user"></i> Details</a></li>
-								<li class="nav-header">Permissions</li>
-								<li><a href="#"><i class="icon-lock"></i> Make <strong>Admin</strong></a></li>
-								<li><a href="#"><i class="icon-lock"></i> Make <strong>Moderator</strong></a></li>
-								<li><a href="#"><i class="icon-lock"></i> Make <strong>User</strong></a></li>
-							</ul>
+						<div>
+							<a href="editUser.do?userId=${user.userId}"><i class="icon-pencil"></i>Edit</a>
+							<a href="deleteUser.do?userId=${user.userId}"><i class="icon-trash"></i>Delete</a>
+							<a href="detailUser.do?userId=${user.userId}"><i class="icon-user"></i>Details</a>
+							<a href="javascript:;" class="J_ResetPassword" data-value="${user.userId}"><i class="icon-lock"></i> Reset pwd</a>
 						</div>
 					</td>
 				</tr>
@@ -107,6 +101,29 @@
 		},
 		function() {
 			$(this).children('i').removeClass('icon-white');
+		});
+	});
+	//自定义artDialog
+	artDialog.tips = function (content, time) {
+	    return artDialog({
+	        id: 'Tips',
+	        title: false,
+	        cancel: false,
+	        fixed: true,
+	        lock: true
+	    })
+	    .content('<div style="padding: 0 1em;">' + content + '</div>')
+	    .time(time || 2000);
+	};
+	//重置密码
+	$('.J_ResetPassword').on('click',function(){
+		var _this = $(this);
+		$.ajax({
+			url:'resetPassword.do',
+			data:{userId:_this.attr('data-value')},
+			success:function(msg){
+				$.dialog.tips(msg.info);
+			}
 		});
 	});
 	</script>

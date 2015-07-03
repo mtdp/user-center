@@ -3,6 +3,7 @@ package me.wanx.usercenter.action;
 import java.util.List;
 
 import me.wanx.common.core.persistence.BasePagination;
+import me.wanx.usercenter.action.bean.ActionResultMessage;
 import me.wanx.usercenter.bean.Role;
 import me.wanx.usercenter.bean.User;
 import me.wanx.usercenter.exception.UserCenterServiceException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 
@@ -45,6 +47,37 @@ public class UserAction extends BaseAction {
 			return "login";
 		}
         return "home";
+	}
+	
+	/**
+	 * 重置密码
+	 * @param Integer
+	 * @return
+	 */
+	@RequestMapping(value="/resetPassword.do")
+	@ResponseBody
+	public ActionResultMessage resetPassword(String userId){
+		ActionResultMessage msg = new ActionResultMessage();
+		if(null == userId || userId.isEmpty()){
+			msg.setCode("error");
+			msg.setInfo("userId不能为空");
+		}
+		try {
+			boolean b = userService.updatePassord(Integer.parseInt(userId));
+			if(b){
+				msg.setCode("success");
+				msg.setInfo("修改密码成功");
+			}
+		} catch (NumberFormatException e) {
+			msg.setCode("error");
+			msg.setInfo("userId必须为数字");
+			return msg;
+		} catch (UserCenterServiceException e) {
+			msg.setCode("error");
+			msg.setInfo("修改密码出错");
+			return msg;
+		}
+		return msg;
 	}
 	
 	/**

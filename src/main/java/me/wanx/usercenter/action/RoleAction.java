@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.wanx.common.core.persistence.BasePagination;
+import me.wanx.usercenter.action.bean.ActionResultMessage;
 import me.wanx.usercenter.action.bean.ZTreeBean;
 import me.wanx.usercenter.bean.Resource;
 import me.wanx.usercenter.bean.Role;
@@ -195,6 +196,37 @@ public class RoleAction extends BaseAction {
 			zTreeBeans.put(treeBean.getId(),treeBean);
 		}
 		return new ArrayList<ZTreeBean>(zTreeBeans.values());
+	}
+	
+	/**
+	 * ajax保存角色下资源
+	 * @param resIds
+	 * @param roleId
+	 * @return
+	 */
+	@RequestMapping("/ajaxSaveRoleRes.do")
+	@ResponseBody
+	public ActionResultMessage ajaxSaveRoleRes(String resIds,String roleId){
+		ActionResultMessage msg = new ActionResultMessage();
+		if(roleId == null || roleId.isEmpty()){
+			msg.setCode("error");
+			msg.setInfo("roleId不能为空");
+			return msg;
+		}
+		if(resIds == null){
+			resIds = "";
+		}
+		List<Resource> resources = new ArrayList<Resource>();
+		String[] strArr = resIds.split(",");
+		for(String str : strArr){
+			Resource r = new Resource();
+			r.setResId(Integer.parseInt(str));
+			resources.add(r);
+		}
+		roleService.saveOrUpdateRoleResource(Integer.parseInt(roleId), resources);
+		msg.setCode("success");
+		msg.setInfo("变更权限成功");
+		return msg;
 	}
 	
 }

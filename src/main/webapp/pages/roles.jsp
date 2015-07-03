@@ -14,6 +14,7 @@
 	<link href="../static/css/bootstrap.css" rel="stylesheet">
 	<link href="../static/css/site.css" rel="stylesheet">
     <link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/plugin/zTree/css/zTreeStyle/zTreeStyle.css">
     <!--[if lt IE 9]>
       <script src="../static/js/html5.js"></script>
     <![endif]-->
@@ -50,7 +51,7 @@
 				<c:forEach items="${rolePage.results}" var="role" varStatus="s">
 				<tr class="list-roles">
 					<td>
-						<input name="roleId" type="checkbox" id="userId" value="${role.roleId}" /> 
+						<input name="roleId" type="checkbox" class="roleId" value="${role.roleId}" /> 
 					</td>
 					<td>${s.index+1}</td>
 					<td>${role.roleName}</td>
@@ -64,12 +65,11 @@
 						</c:if>
 					</td>
 					<td>
-						<div class="btn-group">
-							<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="editRole.do?roleId=${role.roleId}"><i class="icon-pencil"></i> Edit</a></li>
-								<li><a href="deleteRole.do?roleId=${role.roleId}"><i class="icon-trash"></i> Delete</a></li>
-							</ul>
+						<div>
+							<input name="chooseResIds" type="hidden" value="" />
+							<a href="javascript:;" class="J_choose_res" data-value="${role.roleId}"><i class="icon-pencil"></i>Allocate Res</a>
+							<a href="editRole.do?roleId=${role.roleId}"><i class="icon-pencil"></i>Edit</a>
+							<a href="deleteRole.do?roleId=${role.roleId}"><i class="icon-trash"></i>Delete</a>
 						</div>
 					</td>
 				</tr>	
@@ -91,18 +91,94 @@
       </footer>
 
     </div>
-
+	<div id="treeDiv" class="zTreeDemoBackground left" style="display: none;">
+		<ul id="tree" class="ztree"></ul>
+	</div>
     <%@include file="/pages/common/footer.jsp"%>
+    <script type="text/javascript" src="../static/plugin/zTree/js/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="../static/plugin/zTree/js/jquery.ztree.excheck-3.5.js"></script>
 	<script>
-	$(document).ready(function() {
-		$('.dropdown-menu li a').hover(
-		function() {
-			$(this).children('i').addClass('icon-white');
-		},
-		function() {
-			$(this).children('i').removeClass('icon-white');
+		$(document).ready(function() {
+			$('.dropdown-menu li a').hover(
+			function() {
+				$(this).children('i').addClass('icon-white');
+			},
+			function() {
+				$(this).children('i').removeClass('icon-white');
+			});
 		});
-	});
+		//自定义artDialog
+		artDialog.tips = function (content, time) {
+		    return artDialog({
+		        id: 'Tips',
+		        title: false,
+		        cancel: false,
+		        fixed: true,
+		        lock: true
+		    })
+		    .content('<div style="padding: 0 1em;">' + content + '</div>')
+		    .time(time || 2000);
+		};
+		//显示资源tree dialog
+		$('.J_choose_res').on('click',function(){
+			var _this = $(this);
+			var dialog = $.artDialog({
+				id:'roles-id',
+				lock:true,
+				title:'所有资源',
+				okValue:'确认保存',
+				ok:function(){
+					var zTree = $.fn.zTree.getZTreeObj("tree");
+					//获取选中的菜单
+					var checkedMenu = zTree.getCheckedNodes(true);
+					if(checkedMenu != "" && checkedMenu.length>0){
+						this.title("正在提交保存");
+						var values = "";
+						checkedMenu.forEach(function(c){
+							values += c.id+",";
+						});
+						//保存ajax
+						_this.siblings('input').val(values.substring(0,values.length-1));
+						$.ajax({
+							url:'ajaxSaveRoleRes.do',
+							type:'post',
+							async:true,
+							data:{resIds:_this.siblings('input').val(),roleId:_this.attr('data-value')},
+							success:function(msg){
+								$.dialog.tips(msg.info);
+							}
+						});
+					}
+					return true;
+				},
+				cancelValue:'取消',
+				cancel:true
+			});
+			var setting = {
+					view: {selectedMulti: false},
+					check: {enable: true},
+					data: {
+						simpleData: {
+							enable: true,
+							idKey: "id",
+							pIdKey: "pId",
+							rootPId: 0
+							}
+					}
+			};
+			//请求trre
+			$.ajax({
+				url:'ajaxMenu.do',
+				type:'post',
+				data:{resIds:_this.siblings('input').val(),roleId:_this.attr('data-value')},
+				success:function(data){
+					var zNodes = data;
+					$.fn.zTree.init($("#tree"), setting, zNodes);
+					dialog.content(document.getElementById("treeDiv"));
+				}
+			});
+		});
+		
 	</script>
   </body>
 </html>

@@ -29,6 +29,14 @@ public interface IUserDao<T extends User> extends BaseMapper<T> {
 	public User login(@Param("account") String account,@Param("password") String password);
 	
 	/**
+	 * 重置密码
+	 * @param password
+	 * @param userId
+	 * @return
+	 */
+	public int updatePassword(@Param("password") String password,@Param("userId") Integer userId);
+	
+	/**
 	 * 删除userId下所有角色关联信息
 	 * @param userId
 	 * @return

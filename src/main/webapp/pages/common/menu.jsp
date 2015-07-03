@@ -9,6 +9,7 @@
      <li id="J_role">
      	<a href="<%=request.getContextPath()%>/role/roles.do">角色管理</a>
    	 </li>
+   	 <shiro:hasPermission name="user:menu">test permission</shiro:hasPermission>
      <li id="J_res">
      	<a href="<%=request.getContextPath()%>/res/res.do">资源管理</a>
    	 </li>

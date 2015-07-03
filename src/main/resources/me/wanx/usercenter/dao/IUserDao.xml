@@ -26,9 +26,12 @@
 		</delete>
 		
 		<update id="update" parameterType="User">
-			update t_user set 
+			update t_user set
+			<if test="account!=null and account!=''">
+				account=#{account}
+			</if> 
 			<if test="userName!=null and userName!=''">
-				userName=#{userName}
+				,userName=#{userName}
 			</if>
 			<if test="password!=null and password!=''">
 				,password=#{password}
@@ -54,6 +57,11 @@
 			from t_user
 			where account=#{account} and password=#{password}
 		</select>
+		
+		<!-- 重置密码 -->
+		<update id="updatePassword">
+			update t_user set password=#{password} where userId=#{userId}
+		</update>
 		
 		<!-- 删除用户下所有角色 -->
 		<delete id="delRoles">

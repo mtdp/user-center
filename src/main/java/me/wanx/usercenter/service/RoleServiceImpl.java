@@ -73,7 +73,8 @@ public class RoleServiceImpl implements IRoleService {
 		}
 		int c = roleDao.update(role);
 		if(c > 0){
-			saveOrUpdateRoleResource(role.getRoleId(), role.getResources());
+			//TODO 
+			//saveOrUpdateRoleResource(role.getRoleId(), role.getResources());
 			return true;
 		}
 		return false;

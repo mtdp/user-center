@@ -48,7 +48,7 @@
 				<c:forEach items="${resPage.results}" var="res" varStatus="s">
 				<tr class="list-roles">
 					<td>
-						<input name="resId" type="checkbox" id="resId" value="${res.resId}" /> 
+						<input name="resId" type="checkbox" class="resId" value="${res.resId}" /> 
 					</td>
 					<td>${s.index+1}</td>
 					<td>${res.resName}</td>
@@ -63,12 +63,9 @@
 						</c:if>
 					</td>
 					<td>
-						<div class="btn-group">
-							<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="editRes.do?resId=${res.resId}"><i class="icon-pencil"></i> Edit</a></li>
-								<li><a href="deleteRes.do?resId=${res.resId}"><i class="icon-trash"></i> Delete</a></li>
-							</ul>
+						<div>
+							<a href="editRes.do?resId=${res.resId}"><i class="icon-pencil"></i>Edit</a>
+							<a href="deleteRes.do?resId=${res.resId}"><i class="icon-trash"></i>Delete</a>
 						</div>
 					</td>
 				</tr>

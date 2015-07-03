@@ -52,6 +52,15 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
+	public boolean updatePassord(Integer userId) throws UserCenterServiceException {
+		int c = userDao.updatePassword(UserCenterConstant.DEFAULT_PASSWORD, userId);
+		if(c > 0){
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean save(User user) throws UserCenterServiceException {
 		//如果状态为空则设置成功禁用
 		if(null == user.getStatus() || user.getStatus().isEmpty()){

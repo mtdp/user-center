@@ -13,7 +13,7 @@
 	<link href="../static/css/bootstrap.css" rel="stylesheet">
 	<link href="../static/css/site.css" rel="stylesheet">
     <link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/plugin/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="../static/plugin/zTree/css/zTreeStyle/zTreeStyle.css">
     <!--[if lt IE 9]>
       <script src="../static/js/html5.js"></script>
     <![endif]-->
@@ -47,14 +47,15 @@
 							<input name="roleCode" type="text" class="input-xlarge" id="roleCode" value="${role.roleCode}" />
 						</div>
 					</div>
+					<!-- 暂时隐藏
 					<div class="control-group">
 						<label class="control-label" for="chooseRes">chooseRes</label>
 						<div class="controls">
-							<input name="chooseResBtn" type="button" class="input-xlarge" id="chooseResBtnId" value="choose res"/>
-							<input name="chooseResIds" type="hidden" id="chooseResIds" value="" />
+							<input name="chooseResBtn" type="button" class="input-xlarge" id="J_choose_res_btn_id" value="choose res"/>
+							<input name="chooseResIds" type="hidden" id="J_choose_res_ids" value="" />
 						</div>
 					</div>
-					
+					 -->
 					<div class="control-group">
 						<label class="control-label" for="active">Active?</label>
 						<div class="controls">
@@ -99,7 +100,7 @@
 		}
 	});
 	//显示资源tree dialog
-	$('#chooseResBtnId').on('click',function(){
+	$('#J_choose_res_btn_id').on('click',function(){
 		var dialog = $.artDialog({
 			id:'edit-role-id',
 			lock:true,
@@ -114,7 +115,7 @@
 					checkedMenu.forEach(function(c){
 						values += c.id+",";
 					});
-					$('#chooseResIds').val(values.substring(0,values.length-1));
+					$('#J_choose_res_ids').val(values.substring(0,values.length-1));
 				}
 				return true;
 			},
@@ -135,11 +136,10 @@
 		};
 		//请求trre
 		$.ajax({
-			url:"ajaxMenu.do",
+			url:'ajaxMenu.do',
 			type:'post',
-			data:{resIds:$('#chooseResIds').val(),roleId:$('#roleId').val()},
+			data:{resIds:$('#J_choose_res_ids').val(),roleId:$('#roleId').val()},
 			success:function(data){
-				//console.log(data);
 				var zNodes = data;
 				$.fn.zTree.init($("#tree"), setting, zNodes);
 				dialog.content(document.getElementById("treeDiv"));

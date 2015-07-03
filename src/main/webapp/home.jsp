@@ -12,9 +12,7 @@
 <shiro:authenticated>
          用户[<shiro:principal/>]已身份验证通过
 </shiro:authenticated>
-<shiro:hasPermission name="admin:update">
-	admin:update
-</shiro:hasPermission>
 <h2>Hello World home.jsp!</h2>
+<h2> <a href="<%=request.getContextPath()%>/user/users.do">进入管理页面</a>  </h2>
 </body>
 </html>

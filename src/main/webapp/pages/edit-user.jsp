@@ -62,7 +62,7 @@
 						<label class="control-label" for="role">role</label>
 						<div class="controls">
 							<select name="roles[0].roleId" id="role">
-								<option>--请选择角色--</option>
+								<option value="">--请选择角色--</option>
 								<c:forEach items="${roles}" var="role">
 									<option value="${role.roleId}" <c:if test="${role.roleId eq user.roles[0].roleId}"> selected="selected"</c:if> >${role.roleName}</option>
 								</c:forEach>
