@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="me.wanx.usercenter.dao.IAddressDao">
+		
+		<!-- keyProperty="userId" 指定了User对象中的属性 -->
+		<insert id="add" parameterType="Region" keyProperty="regCode" useGeneratedKeys="true">
+			insert into t_region(regCode,regName,regType,regMark,parentCode,rank,createTime,updateTime) 
+						values(#{regCode},#{regName},#{regType},#{regMark},#{parentCode},#{rank},#{createTime},#{updateTime});
+		</insert>
+		
+		<update id="update" parameterType="Region">
+			update t_region set
+			<if test="regName!=null and regName!=''">
+				regName=#{regName}
+			</if> 
+			<if test="regType!=null and regType!=''">
+				,regType=#{regType}
+			</if>
+			<if test="regMark!=null and regMark!=''">
+				,regMark=#{regMark}
+			</if>
+			<if test="parentCode!=null and parentCode!=''">
+				,parentCode=#{parentCode}
+			</if>
+			<if test="rank!=null and rank!=''">
+				,rank=#{rank}
+			</if>
+			<if test="status!=null and status!=''">
+				,status=#{status}
+			</if>
+			<if test="updateTime!=null and updateTime!=''">
+				,updateTime=#{updateTime}
+			</if>
+			where regCode=#{regCode}
+		</update>
+		
+		<!-- 获取所有省份 -->
+		<select id="getAllProvice" resultType="Region">
+			select * 
+			from t_region
+			where regType=2
+			<!-- ${@me.wanx.usercenter.UserCenterConstant@REGION_TYPE_PROVICE} -->
+		</select>
+		
+		<!-- 获取parentCode城市 -->
+		<select id="getCityOrCountyOrAreas" resultType="Region">
+			select *
+			from t_region 
+			where parentCode=#{parentCode}
+		</select>
+		
+		<!-- 根据regCode获取一个省 市县(区) -->
+		<select id="getCountyOrArea" resultType="Region">
+			select *
+			from t_region 
+			where regCode=#{regCode}
+		</select>
+		
+	</mapper>
