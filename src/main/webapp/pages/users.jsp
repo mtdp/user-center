@@ -69,7 +69,7 @@
 							<a href="editUser.do?userId=${user.userId}"><i class="icon-pencil"></i>Edit</a>
 							<a href="deleteUser.do?userId=${user.userId}"><i class="icon-trash"></i>Delete</a>
 							<a href="detailUser.do?userId=${user.userId}"><i class="icon-user"></i>Details</a>
-							<a href="javascript:;" class="J_ResetPassword" data-value="${user.userId}"><i class="icon-lock"></i> Reset pwd</a>
+							<a href="javascript:;" class="J_ResetPassword" data-value="${user.userId}" title="默认密码是123456"><i class="icon-lock"></i> Reset pwd</a>
 						</div>
 					</td>
 				</tr>

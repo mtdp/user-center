@@ -20,8 +20,9 @@
 	       <context:component-scan base-package="me.wanx"/>
 	       <!-- 注解事务 -->
 	       <tx:annotation-driven transaction-manager="transactionManager" />
-           <!-- 数据库配置文件位置 -->   
+           <!-- 数据库配置文件位置    这个配置是PropertyPlaceholderConfigurer bean的简写配置
  		   <context:property-placeholder location="classpath:jdbc.properties" />
+ 		   -->
  		   
  		   <!-- 加载配置文件 -->
 	       <bean id="propertyConfigurer" class="me.wanx.common.core.utils.ProPConfigurer" lazy-init="false">

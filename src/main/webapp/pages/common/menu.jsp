@@ -4,14 +4,13 @@
    <ul class="nav nav-list" id="J_change_active">
      <li class="nav-header"><i class="icon-wrench"></i> 系统管理</li>
      <li id="J_user">
-     	<a href="<%=request.getContextPath()%>/user/users.do">用户管理</a>
+     	<a href="${_ctxPath}/user/users.do">用户管理</a>
    	 </li>
      <li id="J_role">
-     	<a href="<%=request.getContextPath()%>/role/roles.do">角色管理</a>
+     	<a href="${_ctxPath}/role/roles.do">角色管理</a>
    	 </li>
-   	 <shiro:hasPermission name="user:menu">test permission</shiro:hasPermission>
      <li id="J_res">
-     	<a href="<%=request.getContextPath()%>/res/res.do">资源管理</a>
+     	<a href="${_ctxPath}/res/res.do">资源管理</a>
    	 </li>
      <li class="nav-header"><i class="icon-signal"></i> 系统统计</li>
      <li>

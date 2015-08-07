@@ -14,11 +14,30 @@
 	  http://www.springframework.org/schema/context   
       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
       
-    <!-- 缓存管理器 使用Ehcache实现 -->
+    <!-- 缓存管理器 使用Ehcache实现 
 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-	   <!--  <property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>  -->
+	     <property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>
 	</bean>
+	-->
 	
+	<!-- redis缓存管理器 start-->
+	<bean id="redisManager" class="me.wanx.common.core.persistence.RedisManager" init-method="init">
+		<property name="host" value="${redis.host}"/>
+		<property name="port" value="${redis.port}"/>
+		<property name="expire" value="1800"/>
+	</bean>
+	<bean id="redisCacheManager" class="me.wanx.usercenter.shiro.cache.RedisCacheManager">
+		<property name="redisManager" ref="redisManager"/>
+	</bean>
+	<bean id="redisSessionDAO" class="me.wanx.usercenter.shiro.cache.RedisSessionDAO">
+		<property name="redisManager" ref="redisManager"/>
+	</bean>
+	<!-- end -->
+	
+	<!-- 单机shiro自己实现的缓存
+	<bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+	-->
+	 
 	<!-- 凭证匹配器  
 	<bean id="credentialsMatcher" class="com.github.zhangkaitao.shiro.chapter12.credentials.RetryLimitHashedCredentialsMatcher">
 	    <constructor-arg ref="cacheManager"/>
@@ -65,7 +84,8 @@
 	    <property name="deleteInvalidSessions" value="true"/>
 	    <property name="sessionValidationSchedulerEnabled" value="true"/>
 	    <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
-	    <property name="sessionDAO" ref="sessionDAO"/>
+	   <!--  <property name="sessionDAO" ref="sessionDAO"/> -->
+	    <property name="sessionDAO" ref="redisSessionDAO"/>
 	    <property name="sessionIdCookieEnabled" value="true"/>
 	    <property name="sessionIdCookie" ref="sessionIdCookie"/>
 	</bean>
@@ -74,7 +94,8 @@
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="userCenterRealmImpl"/>
 	    <property name="sessionManager" ref="sessionManager"/>
-	    <property name="cacheManager" ref="cacheManager"/>
+	    <!-- <property name="cacheManager" ref="cacheManager"/> -->
+	    <property name="cacheManager" ref="redisCacheManager"/>
 	</bean>		
 	
 	<!-- 基于Form表单的身份验证过滤器 -->

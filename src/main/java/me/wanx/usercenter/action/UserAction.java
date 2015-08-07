@@ -37,15 +37,25 @@ public class UserAction extends BaseAction {
 	@Autowired
 	private IRoleService roleService;
 	
-	@RequestMapping(value="/login.do",method = RequestMethod.POST)
-	public String login(String account, String password){
-		logger.info("welcome to shiro {}","哈哈");
+	/**
+	 * 显示登录页面
+	 * @return
+	 */
+	@RequestMapping(value="/login.do")
+	public String showLogin(){
+		logger.info("welcome to shiro {}","login jsp");
+		return "login";
+	}
+	
+	@RequestMapping(value="/loginAction.do",method = RequestMethod.POST)
+	public String loginAction(String account, String password){
 		try {
 			userService.loginAction(account, password);
 		} catch (UserCenterServiceException e) {
 			logger.error("登录失败",e);
 			return "login";
 		}
+		logger.info("{} login success !",account);
         return "home";
 	}
 	
