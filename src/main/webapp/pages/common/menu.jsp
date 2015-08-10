@@ -30,7 +30,7 @@
      	<a href="#">设置</a>
      </li>
  	 <li>
- 	 	<a href="<%=request.getContextPath()%>/logout">退出</a>
+ 	 	<a href="${_ctxPath}/logout">退出</a>
  	 </li> 
    </ul>
 </div>

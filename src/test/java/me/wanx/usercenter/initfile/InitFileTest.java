@@ -72,7 +72,7 @@ public class InitFileTest {
         subject.logout();
     }
 	
-	 @Test
+	 //@Test
 	    public void testJDBCRealm() {
 	        //1、获取SecurityManager工厂，此处使用Ini配置文件初始化SecurityManager
 	        Factory<org.apache.shiro.mgt.SecurityManager> factory =
@@ -120,7 +120,7 @@ public class InitFileTest {
         return SecurityUtils.getSubject();
     }
  
-    @Test
+    //@Test
     public void testHasRole() {
         login("classpath:shiro-role.ini", "zhang", "123");
         //判断拥有角色：role1

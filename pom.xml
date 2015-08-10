@@ -18,7 +18,7 @@
 		<surefire.junit47.version>2.12</surefire.junit47.version>
 		<cobertura.maven.plugin.version>2.5.1</cobertura.maven.plugin.version>
 		<maven.resources.plugin.version>2.5</maven.resources.plugin.version>
-		<maven.war.plugin.version>2.2</maven.war.plugin.version>
+		<maven.war.plugin.version>2.4</maven.war.plugin.version>
 		<maven.war.plugin.directory>src/main/webapp/WEB-INF</maven.war.plugin.directory>
 		<maven.war.plugin.targetPath>WEB-INF</maven.war.plugin.targetPath>
 		<maven.jar.plugin.version>2.3.2</maven.jar.plugin.version>

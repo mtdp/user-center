@@ -137,8 +137,9 @@
 						checkedMenu.forEach(function(c){
 							values += c.id+",";
 						});
-						//保存ajax
+						//将变更的check赋值到隐藏的input中
 						_this.siblings('input').val(values.substring(0,values.length-1));
+						//ajax保存变更的资源
 						$.ajax({
 							url:'ajaxSaveRoleRes.do',
 							type:'post',
