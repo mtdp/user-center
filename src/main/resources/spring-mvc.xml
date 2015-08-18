@@ -22,10 +22,9 @@
 	   <!-- 配置要扫描的包 -->   
        <context:component-scan base-package="me.wanx.usercenter.action"/>
 		 
-       <!-- 扫描springMVC配置 自动注册
-        DefaultAnnotationHandlerMapping、
-        AnnotationMethodHandlerAdapter-->
-       <mvc:annotation-driven/> 
+       <!-- 扫描springMVC配置 自动注册DefaultAnnotationHandlerMapping、AnnotationMethodHandlerAdapter bean-->
+       <!-- validator="validator" 指定validator -->
+       <mvc:annotation-driven validator="validator"/> 
 	
 	   <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 --> 
        <!-- 
@@ -56,4 +55,7 @@
        		<!-- 设置上传编码 -->  
 	   		<property name="defaultEncoding" value="UTF-8" /> 
 	   </bean>
+	   
+	   <!-- spring validator -->
+	   <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 </beans>

@@ -53,6 +53,21 @@
 		<artifactId>spring-webmvc</artifactId>
 		<version>${spring.version}</version>
 	</dependency>
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-validator</artifactId>
+		<version>4.2.0.Final</version>
+		<exclusions>
+			<exclusion>
+				<artifactId>jaxb-impl</artifactId>
+				<groupId>com.sun.xml.bind</groupId>
+			</exclusion>
+			<exclusion>
+				<artifactId>jaxb-api</artifactId>
+				<groupId>javax.xml.bind</groupId>
+			</exclusion>
+		</exclusions>
+	</dependency>
     <!-- shiro -->
     <dependency>
     	<groupId>org.apache.shiro</groupId>

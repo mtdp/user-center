@@ -2,6 +2,8 @@ package me.wanx.usercenter.action;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import me.wanx.common.core.persistence.BasePagination;
 import me.wanx.usercenter.action.bean.ActionResultMessage;
 import me.wanx.usercenter.bean.Role;
@@ -15,8 +17,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -48,7 +52,7 @@ public class UserAction extends BaseAction {
 	}
 	
 	@RequestMapping(value="/loginAction.do",method = RequestMethod.POST)
-	public String loginAction(String account, String password){
+	public String loginAction(@RequestParam("account")String account, @RequestParam("password")String password){
 		try {
 			userService.loginAction(account, password);
 		} catch (UserCenterServiceException e) {
@@ -66,7 +70,7 @@ public class UserAction extends BaseAction {
 	 */
 	@RequestMapping(value="/resetPassword.do")
 	@ResponseBody
-	public ActionResultMessage resetPassword(String userId){
+	public ActionResultMessage resetPassword(@RequestParam("userId")String userId){
 		ActionResultMessage msg = new ActionResultMessage();
 		if(null == userId || userId.isEmpty()){
 			msg.setCode("error");
@@ -142,7 +146,7 @@ public class UserAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/editUser.do")
-	public String editUser(ModelMap model ,String userId){
+	public String editUser(ModelMap model ,@RequestParam("userId")String userId){
 		try {
 			User u = userService.getUser(Integer.parseInt(userId));
 			model.addAttribute("user", u);
@@ -178,7 +182,7 @@ public class UserAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/deleteUser.do")
-	public String deleteUser(String userId){
+	public String deleteUser(@RequestParam("userId")String userId){
 		try {
 			userService.delete(Integer.parseInt(userId));
 		}catch (NumberFormatException e) {
@@ -195,7 +199,7 @@ public class UserAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/detailUser.do")
-	public String detailUser(ModelMap model ,String userId){
+	public String detailUser(ModelMap model ,@RequestParam("userId")String userId){
 		try {
 			User u = userService.getUser(Integer.parseInt(userId));
 			model.addAttribute("user", u);

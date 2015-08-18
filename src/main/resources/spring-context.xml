@@ -95,6 +95,7 @@
    		   			</props>
    		   		</property>	
    		   </bean>
+   		   <!--
    		   <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
    		   		<property name="beanNames">
    		   			<list>
@@ -104,28 +105,30 @@
    		   		<property name="interceptorNames">
    		   			<list>
    		   				<value>transactionInterceptor</value>
+   		   				 记录每个service方法执行的时间 
+   		   				<value>recordMethodExeTimeServiceImpl</value>
    		   			</list>
    		   		</property>
    		   </bean>
-	  	   <!-- 拦截器配置事务 end-->
+   		   -->
+	  	  <!-- 拦截器配置事务 end-->
 	  	   
 	  	   <!-- tx配置事务 start -->
-	  	   <!-- 
 	  	   <tx:advice id="txAdvice" transaction-manager="transactionManager">
 		        <tx:attributes>
 		            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
 		            <tx:method name="del*" propagation="REQUIRED" rollback-for="Exception"/>
+		            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
 		            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
 		        </tx:attributes>
 		   </tx:advice>
-		    -->
 		   <!-- 第一个*代表所有的返回值类型;第二个*代表所有的类;第三个*代表类所有方法;最后一个..代表所有的参数 -->
-	       <!-- 
 	       <aop:config>
-		        <aop:pointcut id="interceptorPointCuts" expression="execution(* me.wanx.demo.service.*.*(..))" />
-		        <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />        
+		        <aop:pointcut id="interceptorPointCuts" expression="execution(* me.wanx.usercenter.service.*.*(..))" />
+		        <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />    
+		        <!-- aop日志拦截-->
+		        <aop:advisor advice-ref="recordMethodExeTimeServiceImpl" pointcut-ref="interceptorPointCuts"/>    
 	       </aop:config> 
-	       --> 
 	  	   <!-- tx配置事务 end -->
 	  	   
 	  	   <!-- import -->
