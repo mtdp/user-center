@@ -47,6 +47,13 @@
 		<version>2.5</version>
 		<scope>provided</scope>
 	</dependency>
+	<!-- jsp tag 标签 SimpleTagSupport -->
+    <dependency>
+		<groupId>javax.servlet.jsp</groupId>
+		<artifactId>jsp-api</artifactId>
+		<version>2.2</version>
+		<scope>provided</scope>
+	</dependency>
 	<!-- spring mvc -->
 	<dependency>
 		<groupId>org.springframework</groupId>

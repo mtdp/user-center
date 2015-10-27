@@ -47,7 +47,7 @@
 			     <property name="password" value="${jdbc.password}"/>
 			     
 			     <!-- 统计监控过滤器 -->
-			     <property name="filters" value="stat,log4j"/>
+			     <property name="filters" value="stat"/>
 			     
 				 <!-- 连接池设置 -->
 			     <property name="maxActive" value="20"/>
@@ -81,49 +81,18 @@
  		   <!-- SqlSessionFactory -->
 		   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		    	<property name="dataSource" ref="druidDataSource" />
-		    	<property name="typeAliasesPackage" value="me.wanx" />
+		    	<property name="typeAliasesPackage" value="me.wanx.usercenter.bean" />
 		    	<property name="configLocation" value="classpath:mybatis-config.xml"/>
 		   </bean> 
 		   <!-- ScanMapperFiles -->
 		   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		    	<property name="basePackage" value="me.wanx" />
+		    	<property name="basePackage" value="me.wanx.usercenter.dao" />
 		    	<property name="markerInterface" value="me.wanx.common.core.persistence.BaseMapper"/>
 		   </bean>
 		   <!-- 事务配置 -->
   		   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
        			<property name="dataSource" ref="druidDataSource" />
    		   </bean>
-   		   
-   		   <!-- 拦截器配置事务 start-->
-   		   <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
-   		   		<property name="transactionManager" ref="transactionManager"/>
-   		   		<!-- 事务属性 -->
-   		   		<property name="transactionAttributes">
-   		   			<props>
-   		   				<prop key="del*">PROPAGATION_REQUIRED,-Exception</prop>
-   		   				<prop key="add*">PROPAGATION_REQUIRED,-Exception</prop>
-   		   				<prop key="save*">PROPAGATION_REQUIRED,-Exception</prop>
-   		   				<prop key="update*">PROPAGATION_REQUIRED,-Exception</prop>
-   		   			</props>
-   		   		</property>	
-   		   </bean>
-   		   <!--
-   		   <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-   		   		<property name="beanNames">
-   		   			<list>
-   		   				<value>*ServiceImpl</value>
-   		   			</list>
-   		   		</property>
-   		   		<property name="interceptorNames">
-   		   			<list>
-   		   				<value>transactionInterceptor</value>
-   		   				 记录每个service方法执行的时间 
-   		   				<value>recordMethodExeTimeServiceImpl</value>
-   		   			</list>
-   		   		</property>
-   		   </bean>
-   		   -->
-	  	  <!-- 拦截器配置事务 end-->
 	  	   
 	  	   <!-- tx配置事务 start -->
 	  	   <tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -145,4 +114,6 @@
 	  	   
 	  	   <!-- import -->
 	  	   <import resource="spring-shiro.xml"/>
+	  	   <!-- druid 对spring 监控 -->
+	  	   <import resource="druid-monitor.xml"/>
 </beans>
