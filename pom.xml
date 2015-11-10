@@ -5,7 +5,7 @@
   <artifactId>user-center</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>user-center Maven Webapp</name>
+  <name>user-center webapp</name>
   <url>http://maven.apache.org</url>
   <properties>
   		<!-- common setting -->
