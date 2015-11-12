@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="wanx" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="wanx" tagdir="/WEB-INF/tags/" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
