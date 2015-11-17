@@ -57,13 +57,13 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
 	@Override
 	public void update(Session arg0) throws UnknownSessionException {
-		logger.info("更新session[{}]",arg0.getId());
+		logger.debug("更新session[{}]",arg0.getId());
 		this.saveSession(arg0);
 	}
 
 	@Override
 	protected Serializable doCreate(Session arg0) {
-		logger.info("保存session[{}]",arg0.getId());
+		logger.debug("保存session[{}]",arg0.getId());
 		Serializable sessionId = this.generateSessionId(arg0);
 		//绑定sessionId
 		this.assignSessionId(arg0, sessionId);
@@ -95,7 +95,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 		//单位毫秒
 		session.setTimeout(this.redisManager.getExpire()*1000);
 		this.redisManager.set(key.getBytes(), SerializeUtils.serialize(session),this.redisManager.getExpire());
-		logger.info("成功保存key为[{}]的session",key);
+		logger.debug("成功保存key为[{}]的session",key);
 	}
 
 	public RedisManager getRedisManager() {

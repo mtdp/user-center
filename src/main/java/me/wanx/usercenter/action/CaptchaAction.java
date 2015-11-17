@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 验证码action
 * @ClassName: CaptchaAction 
@@ -33,7 +35,7 @@ public class CaptchaAction{
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "getImage.do")
+	@RequestMapping(value = "/getImage.do")
 	protected void getCaptchaImage(HttpServletRequest request,HttpServletResponse response,
 								   @RequestParam("width")int width,@RequestParam("height")int height){
 		//输入类型
@@ -102,6 +104,19 @@ public class CaptchaAction{
 		}
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/getJson.do")
+	public foo resultJson(){
+		foo f = new foo("test","test json");
+		return f;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getStr.do")
+	public String resultStr(){
+		return "测试中文";
+	}
+	
 	/**
 	 * 随机生产color
 	 * @param fc
@@ -120,5 +135,28 @@ public class CaptchaAction{
 		int g = fc + random.nextInt(bc - fc);
 		int b = fc + random.nextInt(bc - fc);
 		return new Color(r, g, b);
+	}
+	
+	class foo implements Serializable{
+		private static final long serialVersionUID = 1L;
+		public foo(){}
+		public foo(String id,String name){
+			this.id=id;
+			this.name=name;
+		}
+		String id;
+		String name;
+		public String getId() {
+			return id;
+		}
+		public void setId(String id) {
+			this.id = id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
 	}
 }
